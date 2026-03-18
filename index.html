@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unchain the Beasts – 3D Puzzle · Match Monsters · Untangle the Chains</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0f0e17;
+            background-image:
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(212, 175, 55, 0.12), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(94, 80, 63, 0.15), transparent),
+                linear-gradient(180deg, #0f0e17 0%, #1a1926 50%, #0f0e17 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            color: #e8e4e0;
+        }
+
+        .chain-bg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.06;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cellipse cx='12' cy='12' rx='8' ry='6' fill='none' stroke='%23d4af37' stroke-width='1.5'/%3E%3Cellipse cx='28' cy='28' rx='8' ry='6' fill='none' stroke='%23d4af37' stroke-width='1.5'/%3E%3Cpath d='M20 18 L20 22 M12 12 L28 28' fill='none' stroke='%23d4af37' stroke-width='1'/%3E%3C/svg%3E");
+        }
+
+        .container {
+            background: linear-gradient(165deg, rgba(26, 25, 38, 0.92) 0%, rgba(15, 14, 23, 0.96) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            box-shadow: 0 24px 56px rgba(0, 0, 0, 0.5),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            max-width: 600px;
+            width: 100%;
+            padding: 44px 40px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .game-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            background: linear-gradient(145deg, rgba(212, 175, 55, 0.2) 0%, rgba(148, 120, 40, 0.15) 100%);
+            border: 2px solid rgba(212, 175, 55, 0.4);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        h1 {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 2rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            margin-bottom: 8px;
+            line-height: 1.15;
+        }
+
+        h1 .gold {
+            color: #d4af37;
+        }
+
+        h1 .light {
+            color: #e8e4e0;
+        }
+
+        .subtitle {
+            color: #9c958a;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 0.02em;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .badge {
+            background: rgba(212, 175, 55, 0.12);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            color: #d4af37;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+        }
+
+        .description {
+            text-align: left;
+            color: #b8b2a8;
+            line-height: 1.8;
+            font-size: 0.98rem;
+            margin-bottom: 24px;
+        }
+
+        .description strong {
+            color: #e8e4e0;
+            font-weight: 700;
+        }
+
+        .features {
+            text-align: left;
+            margin-bottom: 28px;
+        }
+
+        .features h3 {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: 1rem;
+            font-weight: 400;
+            color: #d4af37;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .features li {
+            color: #b8b2a8;
+            padding: 8px 0 8px 28px;
+            position: relative;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .features li::before {
+            content: "◆";
+            position: absolute;
+            left: 0;
+            color: #d4af37;
+            font-size: 0.6em;
+            top: 12px;
+        }
+
+        .app-store-button {
+            display: inline-block;
+            background: linear-gradient(145deg, #c9a227 0%, #a68520 100%);
+            color: #0f0e17;
+            padding: 16px 36px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 800;
+            font-family: 'DM Sans', sans-serif;
+            letter-spacing: 0.04em;
+            transition: all 0.25s ease;
+            border: none;
+            box-shadow: 0 8px 24px rgba(212, 175, 55, 0.35);
+        }
+
+        .app-store-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(212, 175, 55, 0.45);
+            color: #0f0e17;
+        }
+
+        .footer {
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(212, 175, 55, 0.15);
+            font-size: 0.88rem;
+            color: #6e6960;
+            font-weight: 500;
+        }
+
+        .footer a {
+            color: #d4af37;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.65rem; }
+            .container { padding: 32px 24px; }
+            .game-icon { width: 84px; height: 84px; font-size: 40px; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chain-bg" aria-hidden="true"></div>
+
+    <div class="container">
+        <div class="game-icon">🔗</div>
+        <h1><span class="light">Unchain</span> <span class="gold">the Beasts</span></h1>
+        <p class="subtitle">Untangle · Match · Solve in 3D</p>
+
+        <div class="badges">
+            <span class="badge">Free</span>
+            <span class="badge">3D Puzzle</span>
+            <span class="badge">iPad</span>
+            <span class="badge">4+</span>
+        </div>
+
+        <div class="description">
+            <p>Untangle monster chains, match pairs, and solve tricky <strong>3D spatial puzzles</strong> before time runs out. Orbit and zoom the camera around a 3D web of creatures linked by chains. Find monster pairs with a <strong>clear, unblocked line of sight</strong>—tap them and they walk together, merge into a larger beast, and jump to the platform. If their path is blocked, the match fails. Clear every chain on the board before the timer or move limit runs out. Earn coins to spend on power-ups: <strong>extra time</strong>, <strong>extra moves</strong>, <strong>hints</strong>, or <strong>skip</strong> tough levels.</p>
+        </div>
+
+        <div class="features">
+            <h3>Why play</h3>
+            <ul>
+                <li><strong>3D spatial gameplay</strong> – Rotate and zoom to see the full puzzle.</li>
+                <li><strong>Line-of-sight matching</strong> – Only unblocked pairs can merge.</li>
+                <li><strong>Chain-clearing goal</strong> – Free all beasts from the web.</li>
+                <li><strong>Time & move limits</strong> – Plan your taps carefully.</li>
+                <li><strong>Coins & power-ups</strong> – Hints, extra time, extra moves, skip.</li>
+                <li><strong>Designed for iPad</strong> – Big screen, smooth controls.</li>
+            </ul>
+        </div>
+
+        <a href="https://apps.apple.com/us/app/unchain-the-beasts/id6759911641?uo=4" class="app-store-button" target="_blank" rel="noopener noreferrer">
+            Download on App Store
+        </a>
+
+        <div class="footer">
+            <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; © Aaqib Javed
+        </div>
+    </div>
+</body>
+
+</html>
